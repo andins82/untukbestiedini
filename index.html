@@ -172,23 +172,64 @@ function resetLetter(){letterContent.style.display="none";}
 /* GAME */
 let words=["US","UPRAK","PH","Dokumentasi puasa","TO","SNBP","Beasiswa","SNBT","UTBK"];
 function openGame(){showPage("gamePage");stopAllMusic();gameMusic.play();resetGame();}
-function resetGame(){gamePage.innerHTML='<div class="back-btn" style="right:20px;left:auto;" onclick="backMenu()">⬅</div>';
+function resetGame(){
+gamePage.innerHTML='<div class="back-btn" style="right:20px;left:auto;" onclick="backMenu()">⬅</div>';
+
+let remaining = words.length; // hitung sisa kata
+
 words.forEach(word=>{
 let div=document.createElement("div");
-div.className="word";div.innerText=word;
+div.className="word";
+div.innerText=word;
+
 div.style.left=Math.random()*80+"vw";
 div.style.top=Math.random()*80+"vh";
 gamePage.appendChild(div);
-let dx=(Math.random()*2)+1;let dy=(Math.random()*2)+1;
+
+let dx=(Math.random()*2)+1;
+let dy=(Math.random()*2)+1;
+
 let move=setInterval(()=>{
-let x=div.offsetLeft;let y=div.offsetTop;
+let x=div.offsetLeft;
+let y=div.offsetTop;
+
 if(x<=0||x>=window.innerWidth-120)dx=-dx;
 if(y<=0||y>=window.innerHeight-60)dy=-dy;
-div.style.left=x+dx+"px";div.style.top=y+dy+"px";
+
+div.style.left=x+dx+"px";
+div.style.top=y+dy+"px";
 },20);
-div.onclick=function(){div.innerText="💥";clearInterval(move);setTimeout(()=>div.remove(),200);}
+
+div.onclick=function(){
+div.innerText="💥";
+clearInterval(move);
+
+setTimeout(()=>{
+div.remove();
+remaining--;
+
+if(remaining===0){
+setTimeout(()=>{
+let finalText=document.createElement("div");
+finalText.style.position="absolute";
+finalText.style.top="50%";
+finalText.style.left="50%";
+finalText.style.transform="translate(-50%,-50%)";
+finalText.style.fontSize="10px";
+finalText.style.lineHeight="1.6";
+finalText.style.width="90%";
+finalText.style.textAlign="center";
+gamePage.appendChild(finalText);
+
+typeWriter("semuanya akan berlalu dan evi pasti bisa lewatin itu semuaa", finalText, 40);
+},500);
+}
+
+},200);
+}
 });
 }
+
 
 /* BACK */
 function backMenu(){
